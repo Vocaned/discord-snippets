@@ -1,6 +1,6 @@
 const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
-    this.dispatch = this.modules.find(x=>x?.exports?.Z?.isDispatching).exports.Z.dispatch;
+    this.dispatch = (e) => this.modules.find(x=>x?.exports?.Z?.isDispatching).exports.Z.dispatch(e);
 
     this.enableExperiments = () => {
         u = this.modules.find((x)=> x?.exports?.default?.getUsers).exports.default;
