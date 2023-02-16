@@ -1,6 +1,7 @@
 const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
     this.dispatch = (e) => this.modules.find(x=>x?.exports?.Z?.isDispatching).exports.Z.dispatch(e);
+    this.getModuleById = (id) => this.modules.find(x => x.id == id);
 
     this.enableExperiments = () => {
         u = this.modules.find((x)=> x?.exports?.default?.getUsers).exports.default;
@@ -16,8 +17,5 @@ const V = new function(){
                 return webpackChunkdiscord_app[chunk][1][id].toString();
             }
         }
-    }
-    this.getModuleById = (id) => {
-        return this.modules.find(x => x.id == id);
     }
 }()
