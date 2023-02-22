@@ -1,8 +1,7 @@
 const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
-    this.dispatch = (e) => this.findByProps('isDispatching').dispatch(e);
-    this.getModuleById = (id) => this.modules.find(x => x.id == id);
 
+    // Helpers
     this.findByProps = (...props) => {
         for (let m of this.modules) {
             for (let ex in m.exports) {
@@ -10,15 +9,31 @@ const V = new function(){
             }
         }
     }
-    this.printModuleById = (id) => {
-        for (let c of webpackChunkdiscord_app) if (id in c[1]) return c[1][id].toString();
-    }
+    this.dispatch = (event) => this.findByProps('isDispatching').dispatch(event);
+    this.getCurrentUser = () => this.findByProps('getUser', 'getUsers').getCurrentUser();
+    this.getUser = (user) => this.findByProps('getUser', 'getUsers').getUser(id);
+    this.getMessage = (channel, message) => this.findByProps('getMessage').getMessage(channel, message);
+    this.getChannel = (channel) => this.findByProps('getChannel').getChannel(channel);
+    this.getGuild = (guild) => this.findByProps('getGuild', 'getGuilds').getGuild(guild);
+    this.getActionHandler = (store) => Object.values(this.findByProps('getUsers', 'getCurrentUser')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
+    this.getStore = (store) => this.findByProps('Store').Store.getAll().find(s => s.getName() === store);
 
     this.enableExperiments = () => {
-        u = this.findByProps('getUsers');
-        m = Object.values(u._dispatcher._actionHandlers._dependencyGraph.nodes);
-        u.__proto__.getCurrentUser().flags |= 1;
-        m.find((x)=>x.name === "DeveloperExperimentStore").actionHandler["CONNECTION_OPEN"]();
-        try {m.find((x)=>x.name === "ExperimentStore").actionHandler["OVERLAY_INITIALIZE"]({user:{flags: 1}})} catch {}
+        this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
+        this.getActionHandler('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN']();
+        try{this.getActionHandler('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw/catch an error, but also load experiments successfully
+        this.getActionHandler('ExperimentStore').storeDidChange() // Apply experiments
+    }
+    this.overrideExperiment = (id, bucket) => {
+        this.getActionHandler('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
+    }
+    this.getOverrides = () => {
+        let vars = V.getStore('ExperimentStore').__proto__.__getLocalVars();
+        console.table({...vars['guildExperimentOverrides'], ...vars['userExperimentOverrides']});
+    }
+
+    this.getModuleById = (id) => this.modules.find(x => x.id == id);
+    this.printModuleById = (id) => {
+        for (let c of webpackChunkdiscord_app) if (id in c[1]) return c[1][id].toString();
     }
 }()
