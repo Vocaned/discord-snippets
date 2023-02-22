@@ -1,11 +1,18 @@
 const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
-    this.dispatch = (e) => this.modules.find(x=>x?.exports?.Z?.isDispatching).exports.Z.dispatch(e);
+    this.dispatch = (e) => this.findByProps('isDispatching').dispatch(e);
     this.getModuleById = (id) => this.modules.find(x => x.id == id);
-    this.findByProps = (...props) => this.modules.find(m => props.every((x) => m?.exports?.Z?.[x] || m?.exports?.default?.[x]))
+
+    this.findByProps = (...props) => {
+        for (let m of this.modules) {
+            for (let ex in m.exports) {
+                if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
+            }
+        }
+    }
 
     this.enableExperiments = () => {
-        u = this.modules.find((x)=> x?.exports?.default?.getUsers).exports.default;
+        u = this.findByProps('getUsers');
         m = Object.values(u._dispatcher._actionHandlers._dependencyGraph.nodes);
         u.__proto__.getCurrentUser().flags |= 1;
         m.find((x)=>x.name === "DeveloperExperimentStore").actionHandler["CONNECTION_OPEN"]();
