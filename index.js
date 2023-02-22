@@ -2,6 +2,7 @@ const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
     this.dispatch = (e) => this.modules.find(x=>x?.exports?.Z?.isDispatching).exports.Z.dispatch(e);
     this.getModuleById = (id) => this.modules.find(x => x.id == id);
+    this.findByProps = (...props) => this.modules.find(m => props.every((x) => m?.exports?.Z?.[x] || m?.exports?.default?.[x]))
 
     this.enableExperiments = () => {
         u = this.modules.find((x)=> x?.exports?.default?.getUsers).exports.default;
