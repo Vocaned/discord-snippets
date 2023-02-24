@@ -11,11 +11,12 @@ const V = new function(){
     }
     this.dispatch = (event) => this.findByProps('isDispatching').dispatch(event);
     this.getCurrentUser = () => this.findByProps('getUser', 'getUsers').getCurrentUser();
-    this.getUser = (user) => this.findByProps('getUser', 'getUsers').getUser(id);
+    this.getUser = (user) => this.findByProps('getUser', 'getUsers').getUser(user);
+    this.getMember = (guild, member) => this.findByProps('getMember', 'getMembers').getMember(guild, member);
     this.getMessage = (channel, message) => this.findByProps('getMessage').getMessage(channel, message);
     this.getChannel = (channel) => this.findByProps('getChannel').getChannel(channel);
     this.getGuild = (guild) => this.findByProps('getGuild', 'getGuilds').getGuild(guild);
-    this.getActionHandler = (store) => Object.values(this.findByProps('getUsers', 'getCurrentUser')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
+    this.getActionHandler = (store) => Object.values(this.findByProps('getMessage')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
     this.getStore = (store) => this.findByProps('Store').Store.getAll().find(s => s.getName() === store);
 
     this.enableExperiments = () => {
@@ -28,7 +29,7 @@ const V = new function(){
         this.getActionHandler('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
     }
     this.getOverrides = () => {
-        let vars = V.getStore('ExperimentStore').__proto__.__getLocalVars();
+        let vars = this.getStore('ExperimentStore').__proto__.__getLocalVars();
         console.table({...vars['guildExperimentOverrides'], ...vars['userExperimentOverrides']});
     }
 
