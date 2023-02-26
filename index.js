@@ -19,6 +19,8 @@ const V = new function(){
     this.getActionHandler = (store) => Object.values(this.findByProps('getMessage')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
     this.getStore = (store) => this.findByProps('Store').Store.getAll().find(s => s.getName() === store);
 
+    this.mmh3 = (str) => this.findByProps('v3').v3(str);
+
     this.enableExperiments = () => {
         this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
         this.getActionHandler('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN']();
@@ -26,10 +28,11 @@ const V = new function(){
         this.getActionHandler('ExperimentStore').storeDidChange() // Apply experiments
     }
     this.overrideExperiment = (id, bucket) => {
+        // Both guild and user experiments can be overridden
         this.getActionHandler('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
     }
     this.getOverrides = () => {
-        let vars = this.getStore('ExperimentStore').__proto__.__getLocalVars();
+        let vars = this.getStore('ExperimentStore').getSerializedState();
         console.table({...vars['guildExperimentOverrides'], ...vars['userExperimentOverrides']});
     }
 
