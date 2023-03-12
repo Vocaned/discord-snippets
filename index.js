@@ -5,6 +5,7 @@ const V = new function(){
     this.findByProps = (...props) => {
         for (let m of this.modules) {
             for (let ex in m.exports) {
+                if (m.exports[ex] === globalThis[0]) continue; // HACK: EXTREMELY hacky workaround to preventing CORS errors
                 if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
             }
         }
@@ -16,16 +17,16 @@ const V = new function(){
     this.getMessage = (channel, message) => this.findByProps('getMessage').getMessage(channel, message);
     this.getChannel = (channel) => this.findByProps('getChannel').getChannel(channel);
     this.getGuild = (guild) => this.findByProps('getGuild', 'getGuilds').getGuild(guild);
-    this.getActionHandler = (store) => Object.values(this.findByProps('getMessage')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
+    this.getActionHandlers = (store) => Object.values(this.findByProps('getMessage')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
     this.getStore = (store) => this.findByProps('Store').Store.getAll().find(s => s.getName() === store);
 
     this.mmh3 = (str) => this.findByProps('v3').v3(str);
 
     this.enableExperiments = () => {
         this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
-        this.getActionHandler('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN']();
+        this.getActionHandlers('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN']();
         try{this.getActionHandler('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw/catch an error, but also load experiments successfully
-        this.getActionHandler('ExperimentStore').storeDidChange() // Apply experiments
+        this.getActionHandlers('ExperimentStore').storeDidChange() // Apply experiments
     }
     this.overrideExperiment = (id, bucket) => {
         // Both guild and user experiments can be overridden
