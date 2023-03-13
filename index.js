@@ -5,7 +5,6 @@ const V = new function(){
     this.findByProps = (...props) => {
         for (let m of this.modules) {
             for (let ex in m.exports) {
-                if (m.exports[ex] === globalThis[0]) continue; // HACK: EXTREMELY hacky workaround to preventing CORS errors
                 if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
             }
         }
@@ -24,12 +23,12 @@ const V = new function(){
 
     this.enableExperiments = () => {
         this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
-        this.getActionHandlers('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN']();
-        try{this.getActionHandler('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw/catch an error, but also load experiments successfully
-        this.getActionHandlers('ExperimentStore').storeDidChange() // Apply experiments
+        this.getActionHandlers('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN'](); // Enable experiments
+        try{this.getActionHandler('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw an error because we don't supply a list of experiments, but it still loads enabled experiments successfully
+        this.getActionHandlers('ExperimentStore').storeDidChange() // Apply enabled experiments
     }
     this.overrideExperiment = (id, bucket) => {
-        // Both guild and user experiments can be overridden
+        // Both guild and user experiments can be overridden, use `null` bucket to disable
         this.getActionHandler('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
     }
     this.getOverrides = () => {
