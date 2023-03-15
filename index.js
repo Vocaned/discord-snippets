@@ -24,12 +24,12 @@ const V = new function(){
     this.enableExperiments = () => {
         this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
         this.getActionHandlers('DeveloperExperimentStore').actionHandler['CONNECTION_OPEN'](); // Enable experiments
-        try{this.getActionHandler('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw an error because we don't supply a list of experiments, but it still loads enabled experiments successfully
+        try{this.getActionHandlers('ExperimentStore').actionHandler['OVERLAY_INITIALIZE']({user:{flags: 1}})} catch {} // This will always throw an error because we don't supply a list of experiments, but it still loads enabled experiments successfully
         this.getActionHandlers('ExperimentStore').storeDidChange() // Apply enabled experiments
     }
     this.overrideExperiment = (id, bucket) => {
         // Both guild and user experiments can be overridden, use `null` bucket to disable
-        this.getActionHandler('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
+        this.getActionHandlers('ExperimentStore').actionHandler['EXPERIMENT_OVERRIDE_BUCKET']({experimentId: id, experimentBucket: bucket})
     }
     this.getOverrides = () => {
         let vars = this.getStore('ExperimentStore').getSerializedState();
