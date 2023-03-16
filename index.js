@@ -1,10 +1,12 @@
 const V = new function(){
     this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
+    webpackChunkdiscord_app.pop();
 
     // Helpers
     this.findByProps = (...props) => {
         for (let m of this.modules) {
             for (let ex in m.exports) {
+                if (props.every((x) => m.exports?.[x])) return m.exports;
                 if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
             }
         }
