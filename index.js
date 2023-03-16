@@ -6,6 +6,7 @@ const V = new function(){
     this.findByProps = (...props) => {
         for (let m of this.modules) {
             for (let ex in m.exports) {
+                if (m.exports === window) continue;
                 if (props.every((x) => m.exports?.[x])) return m.exports;
                 if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
             }
