@@ -5,13 +5,14 @@ const V = new function(){
     // Helpers
     this.findByProps = (...props) => {
         for (let m of this.modules) {
-            if (!m.exports || m.exports === window) continue;
-            if (props.every((x) => m.exports?.[x])) return m.exports;
+            try {
+                if (!m.exports || m.exports === window) continue;
+                if (props.every((x) => m.exports?.[x])) return m.exports;
 
-            for (let ex in m.exports) {
-                if (ex.length > 3) continue;
-                if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
-            }
+                for (let ex in m.exports) {
+                    if (props.every((x) => m.exports?.[ex]?.[x])) return m.exports[ex];
+                }
+            } catch {}
         }
     }
     this.dispatch = (event) => this.findByProps('isDispatching').dispatch(event);
