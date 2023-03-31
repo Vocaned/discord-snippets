@@ -19,7 +19,7 @@ const V = new function(){
     this.getCurrentUser = () => this.findByProps('getUser', 'getUsers').getCurrentUser();
     this.getUser = (user) => this.findByProps('getUser', 'getUsers').getUser(user);
     this.getMember = (guild, member) => this.findByProps('getMember', 'getMembers').getMember(guild, member);
-    this.getMessage = (channel, message) => this.findByProps('getMessage').getMessage(channel, message);
+    this.getMessage = (channel, message) => this.findByProps('getMessage', 'getMessages').getMessage(channel, message);
     this.getChannel = (channel) => this.findByProps('getChannel').getChannel(channel);
     this.getGuild = (guild) => this.findByProps('getGuild', 'getGuilds').getGuild(guild);
     this.getActionHandlers = (store) => Object.values(this.findByProps('getMessage')._dispatcher._actionHandlers._dependencyGraph.nodes).find(s => s.name === store);
