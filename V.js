@@ -15,7 +15,7 @@ const V = new function(){
             } catch {}
         }
     }
-    this.dispatch = (event) => this.findByProps('isDispatching').dispatch(event);
+    this.dispatch = (event) => this.findByProps('_dispatch').dispatch(event);
     this.getCurrentUser = () => this.findByProps('getUser', 'getUsers').getCurrentUser();
     this.getUser = (user) => this.findByProps('getUser', 'getUsers').getUser(user);
     this.getMember = (guild, member) => this.findByProps('getMember', 'getMembers').getMember(guild, member);
