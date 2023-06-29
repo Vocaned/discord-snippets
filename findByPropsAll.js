@@ -1,7 +1,7 @@
 _mods = webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]);webpackChunkdiscord_app.pop();
 
 findByPropsAll = (...props) => {
-    let f = [];
+    let f=[];
     for (let m of _mods) {
         try {
             if (!m.exports||m.exports===window) continue;
