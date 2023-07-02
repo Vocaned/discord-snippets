@@ -2,7 +2,6 @@
 // Make sure an Intiface Server is running
 
 let buttplugio = async (url, channels, regex)=>{
-    _mods=webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]);webpackChunkdiscord_app.pop();findByProps=(...props)=>{for(let m of _mods){try{if(!m.exports||m.exports===window){continue}if(props.every((x)=>m.exports?.[x])){return m.exports}for(let ex in m.exports){if(props.every((x)=>m.exports?.[ex]?.[x])){return m.exports[ex]}}}catch{}}};
     let currentUser = findByProps('getCurrentUser').getCurrentUser().id;
 
     // Change these variables to modify the vibrations!
@@ -16,11 +15,14 @@ let buttplugio = async (url, channels, regex)=>{
 
     findByProps('_dispatch').addInterceptor(e => {
         if (e.type === 'RPC_NOTIFICATION_CREATE' || (e.type === 'MESSAGE_CREATE' && channels.includes(e.channelId) && e.message.author.id !== currentUser)) {
-            if (regex && !regex.test(e.message.content)) return;
+            if (e.type === 'MESSAGE_CREATE' && regex && !regex.test(e.message.content)) return;
 
             for (let d of client.devices) {
-                if (!d.vibrateAttributes.length) continue;
-                d.vibrate(speed)
+                if (d.vibrateAttributes) d.vibrate(speed)
+                else if (d.oscillateAttributes) d.oscillate(speed);
+                else if (d.rotateAttributes) d.rotate(speed);
+                else continue;
+
                 setTimeout(()=>{d.stop()}, duration);
             }
         }
