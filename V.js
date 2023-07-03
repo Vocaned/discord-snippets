@@ -1,5 +1,6 @@
 const V = new function(){
-    this.modules = (webpackChunkdiscord_app.push([[Symbol()],{},({c})=>Object.values(c)]));
+    this.require = (webpackChunkdiscord_app.push([[Symbol()],{},e=>e]));
+    this.modules = this.require.c;
     webpackChunkdiscord_app.pop();
 
     // Helpers
