@@ -31,7 +31,7 @@ let buttplugio = async (url, channels, regex, control)=>{
             if (regex && !regex.test(e.message.content)) return;
 
             let c = e.message.content.match(/^bzz\.(\d+)\.(\d+)$/);
-            if (control && c) vibrate(client, parseInt(c[1])/100, parseInt(c[2])/100);
+            if (control && c) vibrate(client, parseInt(c[1])/100, parseInt(c[2]));
             else vibrate(client, speed, duration);
         }
     });
