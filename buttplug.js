@@ -22,10 +22,17 @@ let buttplugio = async (url, channels, regex, control)=>{
 
     let connector = new Buttplug.ButtplugBrowserWebsocketClientConnector(url);
     let client = new Buttplug.ButtplugClient('Discord Snipper');
-    client.addListener('deviceadded', d=>{console.log('Device connected:', d.name)});
+    client.addListener('deviceadded', async d=>{console.log('Device connected:', d.name, d.hasBattery ? `(Battery: ${await d.battery() * 100}%)` : '')});
     client.addListener('deviceremoved', d=>{console.log('Device disconnected:', d.name)});
 
+    await client.connect(connector);
+    await client.startScanning();
+    console.log('Scanning for devices.')
+
+    let alive = true;
     findByProps('_dispatch').addInterceptor(e => {
+        if (!client.connected) {if (alive) {console.log('Disconnected from Intiface. Run the snippet again to reconnect.'); alive = false}; return}
+
         if (e.type === 'RPC_NOTIFICATION_CREATE') vibrate(client, speed, duration);
         else if (e.type === 'MESSAGE_CREATE' && channels.includes(e.channelId) && e.message.author.id !== currentUser) {
             if (regex && !regex.test(e.message.content)) return;
@@ -35,8 +42,6 @@ let buttplugio = async (url, channels, regex, control)=>{
             else vibrate(client, speed, duration);
         }
     });
-    await client.connect(connector);
-    await client.startScanning();
 }
 
 // Arguments: url, channels, regex
