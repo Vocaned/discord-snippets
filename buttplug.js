@@ -8,11 +8,15 @@ let buttplugio = async (url, channels, regex, control)=>{
         speed = Math.min(Math.max(speed, 0), 1);
         duration = Math.min(duration, 30000);
         for (let d of client.devices) {
-            if (d.vibrateAttributes) d.vibrate(speed)
-            else if (d.oscillateAttributes) d.oscillate(speed);
-            else if (d.rotateAttributes) d.rotate(speed);
-            else continue;
-            setTimeout(()=>{d.stop()}, duration);
+            try {
+                if (d.vibrateAttributes) d.vibrate(speed)
+                else if (d.oscillateAttributes) d.oscillate(speed);
+                else if (d.rotateAttributes) d.rotate(speed);
+                else continue;
+                setTimeout(()=>{d.stop()}, duration);
+            } catch (e) {
+                console.log(`Error trying to vibrate: ${e}`);
+            }
         }
     }
 
@@ -27,7 +31,7 @@ let buttplugio = async (url, channels, regex, control)=>{
 
     await client.connect(connector);
     await client.startScanning();
-    console.log('Scanning for devices.')
+    console.log('Scanning for devices.');
 
     let alive = true;
     findByProps('_dispatch').addInterceptor(e => {
