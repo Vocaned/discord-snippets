@@ -1,4 +1,4 @@
-// Copy the contents of https://cdn.jsdelivr.net/npm/buttplug@3.0.0/dist/web/buttplug.min.js into the console first !!
+// Copy the contents of https://cdn.jsdelivr.net/npm/buttplug@3.2.1/dist/web/buttplug.js into the console first !!
 // Make sure an Intiface Server is running
 
 let buttplugio = async (url, channels, regex, control)=>{
@@ -24,8 +24,8 @@ let buttplugio = async (url, channels, regex, control)=>{
     let speed = 0.5; // 0.0 - 1.0
     let duration = 500; // ms
 
-    let connector = new Buttplug.ButtplugBrowserWebsocketClientConnector(url);
-    let client = new Buttplug.ButtplugClient('Discord Snipper');
+    let connector = new buttplug.ButtplugBrowserWebsocketClientConnector(url);
+    let client = new buttplug.ButtplugClient('Discord Snipper');
     client.addListener('deviceadded', async d=>{console.log('Device connected:', d.name, d.hasBattery ? `(Battery: ${await d.battery() * 100}%)` : '')});
     client.addListener('deviceremoved', d=>{console.log('Device disconnected:', d.name)});
 
