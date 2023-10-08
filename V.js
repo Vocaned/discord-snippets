@@ -27,6 +27,7 @@ const V = new function(){
     this.getStore = (store) => this.findByProps('Store').Store.getAll().find(s => s.getName() === store);
 
     this.mmh3 = (str) => this.findByProps('v3').v3(str);
+    this.http = this.findByProps('getAPIBaseURL');
 
     this.enableExperiments = () => {
         this.getCurrentUser().flags |= 1; // Give staff flag/badge, required for DevTools
